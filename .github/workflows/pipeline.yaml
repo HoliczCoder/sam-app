@@ -8,23 +8,23 @@ on:
   delete:
     branches:
       - 'feature**'
-  workflow_dispatch:
-    inputs:
-      name:
-        type: choice
-        description: Who to greet
-        options:
-          - monalisa
-          - cschleiden
-      message:
-        required: true
-        description: WHat the hell
-      use-emoji:
-        type: boolean
-        description: Include 🎉🤣 emojis
-      environment:
-        type: environment
-        description: WHat the hell is That
+  # workflow_dispatch:
+  #   inputs:
+  #     name:
+  #       type: choice
+  #       description: Who to greet
+  #       options:
+  #         - monalisa
+  #         - cschleiden
+  #     message:
+  #       required: true
+  #       description: WHat the hell
+  #     use-emoji:
+  #       type: boolean
+  #       description: Include 🎉🤣 emojis
+  #     environment:
+  #       type: environment
+  #       description: WHat the hell is That
 
 env:
   SAM_TEMPLATE: template.yaml
@@ -59,11 +59,11 @@ jobs:
       - run: |
           # trigger the tests here
 
-  greet:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Send greeting
-        run: echo "${{ github.event.inputs.message }} ${{ fromJSON('["", "🥳"]')[github.event.inputs.use-emoji == 'true'] }} ${{ github.event.inputs.name }}"
+  # greet:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Send greeting
+  #       run: echo "${{ github.event.inputs.message }} ${{ fromJSON('["", "🥳"]')[github.event.inputs.use-emoji == 'true'] }} ${{ github.event.inputs.name }}"
 
   delete-feature:
     if: startsWith(github.event.ref, 'feature') && github.event_name == 'delete'
@@ -182,6 +182,7 @@ jobs:
           path: packaged-prod.yaml
 
   deploy-testing:
+    environment: 'dev'
     if: github.ref == 'refs/heads/main'
     needs: [build-and-package]
     runs-on: ubuntu-latest
