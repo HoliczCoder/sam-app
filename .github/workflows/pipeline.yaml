@@ -8,23 +8,6 @@ on:
   delete:
     branches:
       - 'feature**'
-  # workflow_dispatch:
-  #   inputs:
-  #     name:
-  #       type: choice
-  #       description: Who to greet
-  #       options:
-  #         - monalisa
-  #         - cschleiden
-  #     message:
-  #       required: true
-  #       description: WHat the hell
-  #     use-emoji:
-  #       type: boolean
-  #       description: Include 🎉🤣 emojis
-  #     environment:
-  #       type: environment
-  #       description: WHat the hell is That
 
 env:
   SAM_TEMPLATE: template.yaml
@@ -125,6 +108,7 @@ jobs:
             --s3-bucket ${TESTING_ARTIFACTS_BUCKET} \
             --no-fail-on-empty-changeset \
             --role-arn ${TESTING_CLOUDFORMATION_EXECUTION_ROLE}
+            --no-confirm-changeset
 
   build-and-package:
     if: github.ref == 'refs/heads/main'
@@ -182,7 +166,7 @@ jobs:
           path: packaged-prod.yaml
 
   deploy-testing:
-    environment: 'dev'
+    # environment: 'dev'
     if: github.ref == 'refs/heads/main'
     needs: [build-and-package]
     runs-on: ubuntu-latest
@@ -213,6 +197,7 @@ jobs:
             --s3-bucket ${TESTING_ARTIFACTS_BUCKET} \
             --no-fail-on-empty-changeset \
             --role-arn ${TESTING_CLOUDFORMATION_EXECUTION_ROLE}
+            --no-confirm-changeset
 
   integration-test:
     if: github.ref == 'refs/heads/main'
@@ -257,3 +242,4 @@ jobs:
             --s3-bucket ${PROD_ARTIFACTS_BUCKET} \
             --no-fail-on-empty-changeset \
             --role-arn ${PROD_CLOUDFORMATION_EXECUTION_ROLE}
+            --no-confirm-changeset
