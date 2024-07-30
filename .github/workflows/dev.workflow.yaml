@@ -12,7 +12,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.base_ref == 'dev'
+    if: github.head_ref == 'dev'
 
     steps:
       - run: echo "Hello World, pull request from dev to main"
